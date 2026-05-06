@@ -7,7 +7,7 @@ import type { RiveRef } from "rive-react-native";
 
 import { useEffect, useImperativeHandle, useRef, useState } from "react";
 
-import { Platform, StyleSheet, Image } from "react-native";
+import { Platform, StyleSheet, Image, type ImageSourcePropType } from "react-native";
 
 import * as Constants from "expo-constants";
 import * as SplashScreen from "expo-splash-screen";
@@ -87,7 +87,7 @@ const AnimatedSplashImage = ({
  * @returns {React.ReactElement} The component with Rive animation.
  */
 
-const getRiveSource = (source: unknown): RiveSourceResult => {
+const getRiveSource = (source: ImageSourcePropType): RiveSourceResult => {
   const { uri } = Image.resolveAssetSource(source);
   // 1. Remote file (http/https) → url
   if (/^https?:\/\//.test(uri)) {
@@ -195,26 +195,26 @@ const SplashView = ({
       setTextRunValue: (name, value) =>
         riveRef.current?.setTextRunValue(name, value),
       getBooleanState: (inputName) =>
-        riveRef.current?.getBooleanState(inputName),
-      getNumberState: (inputName) => riveRef.current?.getNumberState(inputName),
+        riveRef.current!.getBooleanState(inputName),
+      getNumberState: (inputName) => riveRef.current!.getNumberState(inputName),
       getBooleanStateAtPath: (inputName, path) =>
-        riveRef.current?.getBooleanStateAtPath(inputName, path),
+        riveRef.current!.getBooleanStateAtPath(inputName, path),
       getNumberStateAtPath: (inputName, path) =>
-        riveRef.current?.getNumberStateAtPath(inputName, path),
+        riveRef.current!.getNumberStateAtPath(inputName, path),
       fireStateAtPath: (inputName, path) =>
-        riveRef.current?.fireStateAtPath(inputName, path),
+        riveRef.current!.fireStateAtPath(inputName, path),
       setInputStateAtPath: (inputName, path, value) =>
-        riveRef.current?.setInputStateAtPath(inputName, path, value),
-      setBoolean: (path, value) => riveRef.current?.setBoolean(path, value),
+        riveRef.current!.setInputStateAtPath(inputName, path, value),
+      setBoolean: (path, value) => riveRef.current!.setBoolean(path, value),
       setTextRunValueAtPath: (textRunName, value, path) =>
-        riveRef.current?.setTextRunValueAtPath(textRunName, path, value),
-      setString: (path, value) => riveRef.current?.setString(path, value),
-      setNumber: (path, value) => riveRef.current?.setNumber(path, value),
-      setColor: (path, value) => riveRef.current?.setColor(path, value),
-      setEnum: (path, value) => riveRef.current?.setColor(path, value),
-      trigger: (path) => riveRef.current?.trigger(path),
-      internalNativeEmitter: () => riveRef.current?.internalNativeEmitter(),
-      viewTag: () => riveRef.current?.viewTag(),
+        riveRef.current!.setTextRunValueAtPath(textRunName, path, value),
+      setString: (path, value) => riveRef.current!.setString(path, value),
+      setNumber: (path, value) => riveRef.current!.setNumber(path, value),
+      setColor: (path, value) => riveRef.current!.setColor(path, value),
+      setEnum: (path, value) => riveRef.current!.setColor(path, value),
+      trigger: (path) => riveRef.current!.trigger(path),
+      internalNativeEmitter: () => riveRef.current!.internalNativeEmitter(),
+      viewTag: () => riveRef.current!.viewTag(),
     }),
     [],
   );
