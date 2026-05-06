@@ -28,7 +28,7 @@
     "@types/react": "*",
     "@types/react-native": "*",
     "aes-js": "*",
-    "axios": "*",
+    "axios": "^1.16.0",
     "eslint": "^10.3.0",
     "expo-glass-effect": "*",
     "expo-image": "*",
@@ -45,7 +45,7 @@
     "tamagui": "*",
     "turbo": "^2.3.0",
     "typescript": "^5.7.0",
-    "typescript-eslint": "^8.59.1",
+    "typescript-eslint": "^8.59.2",
     "zustand": "*"
   },
   "type": "module",
