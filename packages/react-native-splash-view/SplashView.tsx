@@ -121,7 +121,7 @@ const SplashView = ({
   ref,
   ...rest
 }: SplashViewProps) => {
-  const riveSource = getRiveSource(source); // { url } *or* { resourceName }
+  const riveSource: RiveSourceResult = source != null ? getRiveSource(source) : { url: '' };
   const riveRef = useRef<RiveRef>(null);
 
   const hasNoAnimation = !source;
