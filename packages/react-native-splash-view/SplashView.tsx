@@ -106,10 +106,6 @@ const getRiveSource = (source: ImageSourcePropType): RiveSourceResult => {
   return { resourceName: uri };
 };
 
-// rive-react-native issue #307: play() silently fails on iOS if called
-// immediately after mount — the native renderer needs time to initialize.
-const IOS_PLAY_DELAY_MS = 150;
-
 const SplashView = ({
   source,
   alignment: _alignment = Alignment.Center,
@@ -134,26 +130,16 @@ const SplashView = ({
 
   const opacity = useSharedValue(1);
 
-  // Handles hiding the static native Launch screen
+  // Handles hiding the static native Launch screen.
+  // The Rive animation starts via autoplay before this fires, so it is
+  // already running when the native splash disappears.
   useEffect(() => {
     const timeout = setTimeout(async () => {
       await SplashScreen.hideAsync();
-
-      if (hasNoAnimation) {
-        return;
-      }
-
-      if (Platform.OS === "ios") {
-        // Give the native Rive renderer time to initialize before calling play().
-        // Without this delay, play() is a no-op on iOS (rive-react-native issue #307).
-        setTimeout(() => riveRef.current?.play(undefined, loopMode), IOS_PLAY_DELAY_MS);
-      } else {
-        riveRef.current?.play(undefined, loopMode);
-      }
     }, launchScreenHideMs);
 
     return () => clearTimeout(timeout);
-  }, [hasNoAnimation, launchScreenHideMs, loopMode]);
+  }, [launchScreenHideMs]);
 
   // Handles fading out the SplashView, as we don't have access to the time of the animation
   useEffect(() => {
@@ -246,7 +232,8 @@ const SplashView = ({
         {...rest}
         {...riveSource}
         style={animationViewStyle}
-        autoplay={Platform.OS === "android"}
+        autoplay
+        loopMode={loopMode}
         onError={(err) => {
           console.error(`${err.type}: ${err.message}`);
         }}
