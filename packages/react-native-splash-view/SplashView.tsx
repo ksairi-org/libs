@@ -97,7 +97,7 @@ const getRiveSource = (source: ImageSourcePropType): RiveSourceResult => {
   // 2. iOS – file inside the .app bundle → resourceName = bare filename
   if (/^file:\/\//.test(uri) && Platform.OS === "ios") {
     const match = uri.match(/.*\.app\/(.*)\.riv$/);
-    if (match) return { resourceName: match[1] }; // “swipe_up”
+    if (match) return { resourceName: match[1] }; // "swipe_up"
     // EAS/OTA downloaded file – treat as network asset
     return { url: uri };
   }
@@ -105,6 +105,10 @@ const getRiveSource = (source: ImageSourcePropType): RiveSourceResult => {
   // 3. Android release or raw-resource name → resourceName
   return { resourceName: uri };
 };
+
+// rive-react-native issue #307: play() silently fails on iOS if called
+// immediately after mount — the native renderer needs time to initialize.
+const IOS_PLAY_DELAY_MS = 150;
 
 const SplashView = ({
   source,
@@ -130,25 +134,22 @@ const SplashView = ({
 
   const opacity = useSharedValue(1);
 
-  // // Android has a weird behavior - when autoplay is set to false, the Rive logo gets displaced momentarily and "jumps" around
-  // useEffect(() => {
-  //   if (Platform.OS === "android") {
-  //     riveRef.current?.stop();
-  //   }
-  // }, []);
-
   // Handles hiding the static native Launch screen
   useEffect(() => {
     const timeout = setTimeout(async () => {
       await SplashScreen.hideAsync();
 
       if (hasNoAnimation) {
-        // No animation provided. Splash screen has been hidden!
-
         return;
       }
 
-      riveRef.current?.play(undefined, loopMode);
+      if (Platform.OS === "ios") {
+        // Give the native Rive renderer time to initialize before calling play().
+        // Without this delay, play() is a no-op on iOS (rive-react-native issue #307).
+        setTimeout(() => riveRef.current?.play(undefined, loopMode), IOS_PLAY_DELAY_MS);
+      } else {
+        riveRef.current?.play(undefined, loopMode);
+      }
     }, launchScreenHideMs);
 
     return () => clearTimeout(timeout);
