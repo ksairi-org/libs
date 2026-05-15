@@ -116,7 +116,7 @@ const SplashView = ({
   launchScreenHideMs = 0,
   style,
   fadeOutDelay = 0,
-  loopMode = LoopMode.OneShot,
+  loopMode: _loopMode = LoopMode.OneShot,
   launchImageUrl,
   ref,
   ...rest
@@ -235,7 +235,10 @@ const SplashView = ({
         fit={fit}
         alignment={alignment}
         autoplay
+<<<<<<< HEAD
         loopMode={loopMode}
+=======
+>>>>>>> ca9fc15 (fix(react-native-splash-view): remove loopMode prop, sync source to 0.1.7)
         onError={(err) => {
           console.error(`${err.type}: ${err.message}`);
         }}

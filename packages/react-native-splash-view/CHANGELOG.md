@@ -1,5 +1,11 @@
 # @ksairi-org/react-native-splash-view
 
+## 0.1.7
+
+### Patch Changes
+
+- Remove `loopMode` prop from Rive component — not part of public Props in rive-react-native@9.8.3
+
 ## 0.1.4
 
 ### Patch Changes
