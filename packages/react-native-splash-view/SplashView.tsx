@@ -97,7 +97,7 @@ const getRiveSource = (source: ImageSourcePropType): RiveSourceResult => {
   // 2. iOS – file inside the .app bundle → resourceName = bare filename
   if (/^file:\/\//.test(uri) && Platform.OS === "ios") {
     const match = uri.match(/.*\.app\/(.*)\.riv$/);
-    if (match) return { resourceName: match[1] }; // "swipe_up"
+    if (match) return { resourceName: match[1] };
     // EAS/OTA downloaded file – treat as network asset
     return { url: uri };
   }
@@ -108,8 +108,8 @@ const getRiveSource = (source: ImageSourcePropType): RiveSourceResult => {
 
 const SplashView = ({
   source,
-  alignment: _alignment = Alignment.Center,
-  fit: _fit = Fit.Contain,
+  alignment = Alignment.Center,
+  fit = Fit.Contain,
   animationViewStyle,
   fadeOutDuration = 1500,
   children: _children,
@@ -232,6 +232,8 @@ const SplashView = ({
         {...rest}
         {...riveSource}
         style={animationViewStyle}
+        fit={fit}
+        alignment={alignment}
         autoplay
         loopMode={loopMode}
         onError={(err) => {
